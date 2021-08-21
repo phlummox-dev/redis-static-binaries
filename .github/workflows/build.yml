@@ -39,6 +39,15 @@ jobs:
         apk add --no-cache \
           tcl
 
-        make test
+        # alpine doesn't produce stacktrace
+        # as expected by test, apparently
+        ./runtest --skipunit integration/psync2-reg
+
+    - name: store build artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: src
+        path: |
+          src
 
 
