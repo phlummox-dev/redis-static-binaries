@@ -46,13 +46,14 @@ jobs:
 
         # alpine doesn't produce stacktrace
         # as expected by test, apparently
-        ./runtest --skipfile tests_to_skip
+        ./runtest --skiptest tests_to_skip || true
 
     - name: store build artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: src
+        name: binaries
         path: |
-          src
-
+          src/redis-cli
+          src/redis-sentinel
+          src/redis-server
 
