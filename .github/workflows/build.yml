@@ -1,0 +1,44 @@
+name: build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    container: alpine:3.11.11@sha256:71a2b866473e26e7c3dfcd7488975ed8d8ba46c495f76a50957fc11f2d6f4dec
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: fetch prerequisites
+      run: |
+        apk add --no-cache \
+          coreutils \
+          curl \
+          gcc \
+          make \
+          musl-dev \
+          openssl-dev
+
+    - name: fetch source
+      run: |
+        set -ex
+
+        DOWNLOADURL=https://github.com/redis/redis/archive/6.2.5/redis-6.2.5.tar.gz
+        curl -L ${DOWNLOADURL} | tar xz --strip-components=1
+
+        set +ex
+
+    - name: make
+      run: |
+        make CFLAGS="-static" LDFLAGS="-static"
+
+    - name: make test
+      run: |
+        apk add --no-cache \
+          tcl
+
+        make test
+
+
