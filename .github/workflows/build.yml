@@ -44,9 +44,12 @@ jobs:
         integration/failover
         EOF
 
-        # alpine doesn't produce stacktrace
-        # as expected by test, apparently
-        ./runtest --skiptest tests_to_skip || true
+        # alpine doesn't produce stacktrace as expected by test,
+        # apparently, and test-skip args don't seem to work --
+        # so edit failing tests out
+        sed -i '/integration\/psync2$/d /integration\/failover$/d' tests/test_helper.tcl
+
+        ./runtest --skipunit integration/psync2-reg --skipunit integration/failover
 
     - name: store build artifacts
       uses: actions/upload-artifact@v2
