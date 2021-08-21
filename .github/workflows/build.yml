@@ -50,7 +50,7 @@ jobs:
         # So forcefully ignore them by editing test out of script.
         sed -i '/} elseif {$system_name eq {linux}} {/d' tests/integration/logging.tcl
 
-        ./runtest --skipunit integration/psync2-reg --skipunit integration/failover
+        ./runtest
 
     - name: store build artifacts
       uses: actions/upload-artifact@v2
